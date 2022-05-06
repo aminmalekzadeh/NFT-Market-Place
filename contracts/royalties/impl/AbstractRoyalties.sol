@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity  ^0.8.0;
 
 import "../LibRoyality.sol";
+import "../IERC2981Royalties.sol";
 
 abstract contract AbstractRoyalties {
     mapping (uint256 => LibRoyality.Part[]) internal royalties;

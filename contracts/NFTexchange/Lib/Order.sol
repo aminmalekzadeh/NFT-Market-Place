@@ -4,10 +4,11 @@ pragma solidity  ^0.8.0;
 import "./LibAsset.sol";
 import "./LibTransfer.sol";
 import "./State.sol";
+import "./interface/IOrder.sol";
 
-abstract contract Order {
+library Order {
 
-  struct Order {
+  struct OrderItem {
     uint id;
     address payable seller;
     LibAsset.Asset sellerAsset;
@@ -15,76 +16,20 @@ abstract contract Order {
     LibAsset.Asset buyerAsset;
     uint start;
     uint end;
-    State state;
+    State.stateItem state;
   }
 
-  event MarketItemCreated (
-    uint indexed id,
-    address indexed nftContract,
-    uint256 indexed tokenId,
-    address seller,
-    address buyer,
-    address ERC20Token,
-    uint amount,
-    uint start,
-    uint end,
-    uint256 price,
-    State state
-   );
 
-  event MarketItemSold (
-    uint indexed id,
-    address indexed nftContract,
-    uint256 indexed tokenId,
-    address seller,
-    address buyer,
-    uint amount,
-    uint256 price,
-    State state
-  );
+  function isApproved(LibAsset.Asset memory _asset) internal view {
 
-
-  function createMarketItem(Order memory _order) public payable nonReentrant {
-
-    require(price > 0, "Price must be at least 1 wei");
-
-    _itemCounter.increment();
-    uint256 id = _itemCounter.current();
-
-    marketItems[id] =  Order(
-      id,
-      _order.nftContract,
-      tokenId,
-      payable(msg.sender),
-      payable(address(0)),
-      ERC20Token,
-      amount,
-      start,
-      end,
-      price,
-      State.Created
-    );
-
-    if(amount == 0){
-      require(IERC721(nftContract).isApprovedForAll(msg.sender, address(this)), "NFT must be approved to market");
-    }else{
-      require(amount <= IERC1155(nftContract).balanceOf(msg.sender, tokenId), "You don't have amount enough of this token");
-      require(IERC1155(nftContract).isApprovedForAll(msg.sender, address(this)), "NFT must be approved to market");
+    (address token, uint tokenId) = abi.decode(_asset.assetType.data, (address, uint));
+    if(_asset.assetType.assetClass == LibAsset.ERC721_ASSET_CLASS){
+      require(IERC721(token).isApprovedForAll(msg.sender, address(this)), "NFT must be approved to market");
+    }else if (_asset.assetType.assetClass == LibAsset.ERC1155_ASSET_CLASS) {
+      require(_asset.value <= IERC1155(token).balanceOf(msg.sender, tokenId), "You don't have amount enough of this token");
+      require(IERC1155(token).isApprovedForAll(msg.sender, address(this)), "NFT must be approved to market");
     }
-    
-    emit MarketItemCreated(
-      id,
-      nftContract,
-      tokenId,
-      msg.sender,
-      address(0),
-      ERC20Token,
-      amount,
-      start,
-      end,
-      price,
-      State.Created
-    );
+
   }
     
 }

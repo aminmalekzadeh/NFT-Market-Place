@@ -2,21 +2,19 @@
 pragma solidity  ^0.8.0;
 
 import "./Order.sol";
-import "../NFTexchange.sol";
+import "../NFTexchangeCore.sol";
 
-abstract contract State {
 
-    enum State { Created, Release, Inactive }
-    NFTexchange e;
+library State {
 
-    function setState(uint memory _ordeId, State _state, address _contract) external {
-        e = NFTexchange(_contract);
-        Order storage item = e.orderItems[_ordeId];
-        item.state = _state;
+    enum stateItem { Created, Release, Inactive }
+
+    function setState(Order.OrderItem memory _order, stateItem _state) external pure {
+        _order.state = _state;
     }
 
-    function getState(uint memory _ordeId, address _contract) external view returns(State) {
-        e = NFTexchange(_contract);
-        return e.orderItems[_ordeId].state;
-    }
+    // function getState(uint memory _ordeId, address _contract) external view returns(State) {
+    //     e = NFTexchange(_contract);
+    //     return e.orderItems[_ordeId].state;
+    // }
 }

@@ -12,9 +12,8 @@ import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 import "../../royalties/impl/RoyaltiesV2impl.sol";
 import "../../royalties/LibRoyality.sol";
 import "../../royalties/LibRoyaltiesV2.sol";
-import "../../royalties/IERC2981Royalties.sol";
 
-contract TokenERC721LazyMint is ERC721URIStorage, ERC721Burnable, RoyaltiesV2Impl, Ownable, EIP712, AccessControl, IERC2981Royalties {
+contract TokenERC721LazyMint is ERC721URIStorage, ERC721Burnable, RoyaltiesV2Impl, Ownable, EIP712, AccessControl {
     using ECDSA for bytes32;
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
@@ -120,21 +119,6 @@ contract TokenERC721LazyMint is ERC721URIStorage, ERC721Burnable, RoyaltiesV2Imp
         returns (string memory)
     {
         return super.tokenURI(tokenId);
-    }
-
-    function royalityInfo(uint256 _tokenId, uint256 _value)
-        external
-        view
-        returns (address _receiver, uint256 _royaltyAmount)
-    {
-        LibRoyality.Part[] memory _royalities = royalties[_tokenId];
-        if (_royalities.length > 0) {
-            return (
-                _royalities[0].account,
-                (_value * _royalities[0].value) / 10000
-            );
-        }
-        return (address(0), 0);
     }
 
     function supportsInterface(bytes4 interfaceId)

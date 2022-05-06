@@ -4,7 +4,6 @@ pragma solidity  ^0.8.0;
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./Validate.sol";
 
-
 abstract contract Bids is Validate {
 
    Counters.Counter private _itemBidCounter;

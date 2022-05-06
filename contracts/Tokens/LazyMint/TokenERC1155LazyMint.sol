@@ -24,6 +24,7 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable,  Ownable, RoyaltiesV2
         uint256 tokenId;
         uint256 minPrice;
         uint256 supply;
+        address account;
         string uri;
     }
 
@@ -37,13 +38,13 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable,  Ownable, RoyaltiesV2
         _setURI(newuri);
     }
 
-    function mint(address account, uint256 id, uint256 amount, string memory _uri,bytes memory data)
+    function Lazymint(NFTVoucher calldata voucher, address redeemer, bytes memory signature ,bytes memory data)
         public
         onlyOwner
     {
-        _mint(account, id, amount, data);
-        tokenIds[id] = id;
-        setTokenURI(id, _uri);
+        _mint(voucher.account, voucher.tokenId, voucher.supply, data);
+        tokenIds[voucher.tokenId] = voucher.tokenId;
+        setTokenURI(voucher.tokenId, voucher.uri);
         setApprovalForAll(contractAddress, true);
     }
 
