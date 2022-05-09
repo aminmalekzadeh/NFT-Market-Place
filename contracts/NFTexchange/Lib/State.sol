@@ -2,8 +2,6 @@
 pragma solidity  ^0.8.0;
 
 import "./Order.sol";
-import "../NFTexchangeCore.sol";
-
 
 library State {
 

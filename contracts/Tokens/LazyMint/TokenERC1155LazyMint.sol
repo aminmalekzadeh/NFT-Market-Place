@@ -3,13 +3,15 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../../royalties/impl/RoyaltiesV2impl.sol";
+import "../../royalties/impl/RoyaltiesV2Impl.sol";
+import "./signtureEIP712/signtureERC1155.sol";
 import "../../royalties/LibRoyality.sol";
 import "../../royalties/LibRoyaltiesV2.sol";
 
-contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable,  Ownable, RoyaltiesV2Impl {
+contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable, Ownable, AccessControl, RoyaltiesV2Impl, signtureERC1155 {
 
     bytes4 private constant _INTERFACE_ID_ERC2981 = 0x2a55205a;
     address public contractAddress;
@@ -17,18 +19,12 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable,  Ownable, RoyaltiesV2
     string contracturi;
     mapping(uint256 => uint256) public tokenIds;
     mapping (uint256 => string) public _tokenURIs;
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     string private _baseURI;
 
-    struct NFTVoucher {
-        uint256 tokenId;
-        uint256 minPrice;
-        uint256 supply;
-        address account;
-        string uri;
-    }
-
-    constructor(string memory _uri, address contractAddr) ERC1155(_uri) {
+    constructor(string memory _uri, address minter, address contractAddr) ERC1155(_uri) {
+        _setupRole(MINTER_ROLE, minter);
         TokenURI = _uri;
         contractAddress = contractAddr;
         contracturi = _uri;
@@ -40,12 +36,20 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable,  Ownable, RoyaltiesV2
 
     function Lazymint(NFTVoucher calldata voucher, address redeemer, bytes memory signature ,bytes memory data)
         public
-        onlyOwner
+        payable
     {
+         address signer = _verify(voucher, signature);
+
+        require(hasRole(MINTER_ROLE, signer), "Invalid signature - unknown signer");
+        require(msg.value >= voucher.minPrice, "Insufficient funds to redeem");
+
         _mint(voucher.account, voucher.tokenId, voucher.supply, data);
         tokenIds[voucher.tokenId] = voucher.tokenId;
         setTokenURI(voucher.tokenId, voucher.uri);
+        safeTransferFrom(voucher.account, redeemer, voucher.tokenId, voucher.supply, data);
         setApprovalForAll(contractAddress, true);
+        address payable receiver = payable(signer);
+        receiver.transfer(msg.value);
     }
 
     function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
@@ -101,7 +105,7 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable,  Ownable, RoyaltiesV2
         public
         view
         virtual
-        override
+        override(AccessControl,ERC1155)
         returns (bool)
     {
         if (interfaceId == LibRoyaltiesV2._INTERFACE_ID_ROYALTIES) {

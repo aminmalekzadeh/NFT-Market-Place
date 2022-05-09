@@ -9,11 +9,12 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
-import "../../royalties/impl/RoyaltiesV2impl.sol";
+import "./signtureEIP712/signtureERC721.sol";
+import "../../royalties/impl/RoyaltiesV2Impl.sol";
 import "../../royalties/LibRoyality.sol";
 import "../../royalties/LibRoyaltiesV2.sol";
 
-contract TokenERC721LazyMint is ERC721URIStorage, ERC721Burnable, RoyaltiesV2Impl, Ownable, EIP712, AccessControl {
+contract TokenERC721LazyMint is ERC721URIStorage, ERC721Burnable, RoyaltiesV2Impl, Ownable, signtureERC721, AccessControl {
     using ECDSA for bytes32;
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
@@ -28,11 +29,6 @@ contract TokenERC721LazyMint is ERC721URIStorage, ERC721Burnable, RoyaltiesV2Imp
     mapping(uint256 => uint256) public getTokenIDs;
     mapping(address => uint256) public tokenIds;
 
-    struct NFTVoucher {
-        uint256 tokenId;
-        uint256 minPrice;
-        string uri;
-    }
 
     modifier isOwnerTokenId(uint256 _tokenId) {
         require(ownerOf(_tokenId) == address(msg.sender) , "you should be owner this token id");
@@ -41,26 +37,10 @@ contract TokenERC721LazyMint is ERC721URIStorage, ERC721Burnable, RoyaltiesV2Imp
 
     constructor (string memory _name, string memory _symbol, address minter, address contractAddr, string memory _contracturi)
      ERC721(_name, _symbol)
-     EIP712("LazyNFT-Voucher", "1") 
     {
        _setupRole(MINTER_ROLE, minter);
        contractAddress = contractAddr;
        contracturi = _contracturi;
-    }
-
-    function _hash(NFTVoucher calldata voucher) internal view returns (bytes32) {
-        return _hashTypedDataV4(keccak256(abi.encode(
-           keccak256("NFTVoucher(uint256 tokenId,uint256 minPrice,string uri)"),
-           voucher.tokenId,
-           voucher.minPrice,
-           keccak256(bytes(voucher.uri))
-        )));
-    }
-
-
-    function _verify(NFTVoucher calldata voucher, bytes memory signature) internal view returns (address) {
-        bytes32 digest = _hash(voucher);
-        return digest.toEthSignedMessageHash().recover(signature);
     }
 
     function contractURI() public view returns (string memory) {
@@ -75,7 +55,7 @@ contract TokenERC721LazyMint is ERC721URIStorage, ERC721Burnable, RoyaltiesV2Imp
         super._burn(tokenId);
     }
 
-    function lazyMint(address redeemer, NFTVoucher calldata voucher, bytes memory signature) public payable {
+    function lazyMint(address redeemer, signtureEIP721.NFTVoucher calldata voucher, bytes memory signature) public payable {
         address signer = _verify(voucher, signature);
 
         require(hasRole(MINTER_ROLE, signer), "Invalid signature - unknown signer");

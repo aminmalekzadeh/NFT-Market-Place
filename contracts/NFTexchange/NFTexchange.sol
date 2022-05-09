@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
@@ -20,7 +21,7 @@ import "./Lib/interface/IOrder.sol";
 import "../royalties/IERC2981Royalties.sol";
 
 
-contract NFTexchange is ReentrancyGuard, Validate {
+contract NFTexchange is ReentrancyGuard, Validate, Initializable {
   
   using Counters for Counters.Counter;
   using SafeMath for uint;
@@ -54,6 +55,9 @@ contract NFTexchange is ReentrancyGuard, Validate {
     State.stateItem state
   );
 
+   function initialize() public initializer {
+       // we can set param for update 
+    }
 
    function createMarketItem(Order.OrderItem memory _order) public {
 
