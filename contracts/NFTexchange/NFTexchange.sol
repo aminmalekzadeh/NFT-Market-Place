@@ -5,7 +5,6 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
@@ -13,25 +12,28 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "./Lib/LibAsset.sol";
 import "./Lib/LibTransfer.sol";
+import "./Lib/MarketOwner.sol";
 import "./Lib/Order.sol";
 import "./Lib/State.sol";
 import "./Lib/Validate.sol";
 import "./Lib/interface/ITransferManager.sol";
+// import "./Lib/TransferManager.sol";
 import "./Lib/interface/IOrder.sol";
 import "../royalties/IERC2981Royalties.sol";
 
 
-contract NFTexchange is ReentrancyGuard, Validate, Initializable {
+contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
   
   using Counters for Counters.Counter;
   using SafeMath for uint;
   Counters.Counter private _itemCounter; //start from 1
   Counters.Counter private _itemSoldCounter;
 
-  address payable public marketowner;
   address payable recieverRoyalty;
 
-  Order.OrderItem order;
+      
+  using LibTransfer for address;
+  uint fee;
 
   mapping(uint256 => Order.OrderItem) private orderItems;
 
@@ -55,9 +57,6 @@ contract NFTexchange is ReentrancyGuard, Validate, Initializable {
     State.stateItem state
   );
 
-   function initialize() public initializer {
-       // we can set param for update 
-    }
 
    function createMarketItem(Order.OrderItem memory _order) public {
 
@@ -123,16 +122,38 @@ contract NFTexchange is ReentrancyGuard, Validate, Initializable {
 
 //   }
 
-  function marketSale(uint256 marketItemId, LibAsset.AssetType memory _assetType) public payable nonReentrant  {
+  function marketSale(uint256 marketItemId, LibAsset.Asset memory _asset) public payable nonReentrant  {
     Order.OrderItem storage item = orderItems[marketItemId];
     checkStatusItem(item);
     validateOrder(item);
     LibAsset.Asset memory matchNFT = item.sellerAsset;
     if(matchNFT.assetType.assetClass == LibAsset.ERC1155_ASSET_CLASS || matchNFT.assetType.assetClass == LibAsset.ERC721_ASSET_CLASS){
         (address token, uint tokenId) = abi.decode(matchNFT.assetType.data, (address, uint));
-        // doTransfer(item, _assetType);
+        doTransfer(item, _asset);
     }
   } 
+
+
+
+   function doTransfer(Order.OrderItem memory order, LibAsset.Asset memory _assetBuyer) private {
+        LibAsset.Asset memory buyerAsset = order.buyerAsset;
+        LibAsset.Asset memory sellerAsset = order.sellerAsset;
+        (address token, uint tokenId) = abi.decode(sellerAsset.assetType.data, (address, uint));
+        if(sellerAsset.assetType.assetClass == LibAsset.ERC721_ASSET_CLASS){
+           IERC721(token).safeTransferFrom(order.seller, order.buyer, tokenId);
+        }else if(sellerAsset.assetType.assetClass == LibAsset.ERC1155_ASSET_CLASS){
+           IERC1155(token).safeTransferFrom(order.seller, order.buyer, tokenId, sellerAsset.value,
+           "0x00");
+           if(_assetBuyer.assetType.assetClass == buyerAsset.assetType.assetClass){
+               if(_assetBuyer.assetType.assetClass == LibAsset.ERC20_ASSET_CLASS){
+                (address tokenAddress) = abi.decode(_assetBuyer.assetType.data, (address));
+                IERC20(tokenAddress).transfer(order.seller, _assetBuyer.value);
+               }else if(_assetBuyer.assetType.assetClass == LibAsset.ETH_ASSET_CLASS) {
+                address(order.seller).transferEth(_assetBuyer.value);
+               }
+            }
+        }
+    }
 
 //   function createMarketSaleERC721(
 //     uint256 marketItemId
@@ -234,94 +255,6 @@ contract NFTexchange is ReentrancyGuard, Validate, Initializable {
 //       price,
 //       State.Release
 //     );    
-//   }
-
-
-  
-
-//   function fetchActiveItems() public view returns (Order.OrderItem[] memory) {
-//     return fetchHepler(FetchOperator.ActiveItems);
-//   }
-
-//   /**
-//    * @dev Returns only market items a user has purchased
-//    * todo pagination
-//    */
-//   function fetchMyPurchasedItems() public view returns (Order.OrderItem[] memory) {
-//     return fetchHepler(FetchOperator.MyPurchasedItems);
-//   }
-
-//   /**
-//    * @dev Returns only market items a user has created
-//    * todo pagination
-//   */
-//   function fetchMyCreatedItems() public view returns (Order.OrderItem[] memory) {
-//     return fetchHepler(FetchOperator.MyCreatedItems);
-//   }
-
-//   enum FetchOperator { ActiveItems, MyPurchasedItems, MyCreatedItems}
-
-  /**
-   * @dev fetch helper
-   * todo pagination   
-   */
-//    function fetchHepler(FetchOperator _op) private view returns (Order.OrderItem[] memory) {     
-//     uint total = _itemCounter.current();
-
-//     uint itemCount = 0;
-//     for (uint i = 1; i <= total; i++) {
-//       if (isCondition(orderItems[i], _op)) {
-//         itemCount ++;
-//       }
-//     }
-
-//     uint index = 0;
-//     Order.OrderItem[] memory items = new Order.OrderItem[](itemCount);
-//     for (uint i = 1; i <= total; i++) {
-//       if (isCondition(orderItems[i], _op)) {
-//         items[index] = orderItems[i];
-//         index ++;
-//       }
-//     }
-//     return items;
-//   } 
-
-  /**
-   * @dev helper to build condition
-   *
-   * todo should reduce duplicate contract call here
-   * (IERC721(item.nftContract).getApproved(item.tokenId) called in two loop
-   */
-//   function isCondition(Order.OrderItem memory item, FetchOperator _op) private view returns (bool){
-//     if(_op == FetchOperator.MyCreatedItems){ 
-//       return 
-//         (item.seller == msg.sender
-//           && item.state != State.stateItem.Inactive
-//         )? true
-//          : false;
-//     }else if(_op == FetchOperator.MyPurchasedItems){
-//       return
-//         (item.buyer == msg.sender) ? true: false;
-//     }else if(_op == FetchOperator.ActiveItems){
-//       if(item.amount == 0){
-//       return 
-//         (item.buyer == address(0) 
-//           && item.state == State.Created
-//           && (IERC721(item.nftContract).getApproved(item.tokenId) == address(this))
-//         )? true
-//          : false;
-//       }else{
-//         return 
-//         (item.buyer == address(0) 
-//           && item.state == State.Created
-//           && IERC1155(item.nftContract).isApprovedForAll(item.seller, address(this))
-//         ) ? true
-//          : false;
-//       }
-      
-//     }else{
-//       return false;
-//     }
 //   }
 
 }

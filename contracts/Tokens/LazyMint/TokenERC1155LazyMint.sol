@@ -17,11 +17,8 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable, Ownable, AccessContro
     address public contractAddress;
     string TokenURI;
     string contracturi;
-    mapping(uint256 => uint256) public tokenIds;
     mapping (uint256 => string) public _tokenURIs;
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-
-    string private _baseURI;
 
     constructor(string memory _uri, address minter, address contractAddr) ERC1155(_uri) {
         _setupRole(MINTER_ROLE, minter);
@@ -44,7 +41,6 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable, Ownable, AccessContro
         require(msg.value >= voucher.minPrice, "Insufficient funds to redeem");
 
         _mint(voucher.account, voucher.tokenId, voucher.supply, data);
-        tokenIds[voucher.tokenId] = voucher.tokenId;
         setTokenURI(voucher.tokenId, voucher.uri);
         safeTransferFrom(voucher.account, redeemer, voucher.tokenId, voucher.supply, data);
         setApprovalForAll(contractAddress, true);
@@ -84,11 +80,6 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable, Ownable, AccessContro
             );
         }
         return (address(0), 0);
-    }
-
-    function _tokenURI(uint256 tokenId) private view returns (string memory) {
-        string memory __tokenURI = _tokenURIs[tokenId];
-        return string(abi.encodePacked(__tokenURI));
     }
 
     function setTokenURI(uint256 tokenId, string memory _uri) public onlyOwner {

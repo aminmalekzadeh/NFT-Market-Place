@@ -16,18 +16,11 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable,  Ownable, RoyaltiesV2
     string TokenURI;
     string contracturi;
     mapping(uint256 => uint256) public tokenIds;
-    mapping (uint256 => string) public _tokenURIs;
 
-    string private _baseURI;
 
     constructor(string memory _uri, address contractAddr) ERC1155(_uri) {
         TokenURI = _uri;
         contractAddress = contractAddr;
-        contracturi = _uri;
-    }
-
-    function setURI(string memory newuri) public onlyOwner {
-        _setURI(newuri);
     }
 
     function mint(address account, uint256 id, uint256 amount, string memory _uri,bytes memory data)
@@ -38,13 +31,6 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable,  Ownable, RoyaltiesV2
         tokenIds[id] = id;
         setTokenURI(id, _uri);
         setApprovalForAll(contractAddress, true);
-    }
-
-    function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
-        public
-        onlyOwner
-    {
-        _mintBatch(to, ids, amounts, data);
     }
 
     //configure royalties for Rariable
@@ -74,14 +60,9 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable,  Ownable, RoyaltiesV2
         return (address(0), 0);
     }
 
-    function _tokenURI(uint256 tokenId) private view returns (string memory) {
-        string memory __tokenURI = _tokenURIs[tokenId];
-        return string(abi.encodePacked(__tokenURI));
-    }
-
     function setTokenURI(uint256 tokenId, string memory _uri) public onlyOwner {
         _tokenURIs[tokenId] = _uri;
-        emit URI(_tokenURI(tokenId), tokenId);
+        emit URI(uri(tokenId), tokenId);
     }
 
     function uri(uint256 tokenId) public view virtual override returns (string memory) {
