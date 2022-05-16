@@ -10,9 +10,4 @@ library State {
     function setState(Order.OrderItem memory _order, stateItem _state) external pure {
         _order.state = _state;
     }
-
-    // function getState(uint memory _ordeId, address _contract) external view returns(State) {
-    //     e = NFTexchange(_contract);
-    //     return e.orderItems[_ordeId].state;
-    // }
 }

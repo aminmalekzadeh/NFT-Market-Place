@@ -15,7 +15,7 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable,  Ownable, RoyaltiesV2
     address public contractAddress;
     string TokenURI;
     string contracturi;
-    mapping(uint256 => uint256) public tokenIds;
+    mapping (uint256 => string) public _tokenURIs;
 
 
     constructor(string memory _uri, address contractAddr) ERC1155(_uri) {
@@ -28,7 +28,6 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable,  Ownable, RoyaltiesV2
         onlyOwner
     {
         _mint(account, id, amount, data);
-        tokenIds[id] = id;
         setTokenURI(id, _uri);
         setApprovalForAll(contractAddress, true);
     }
@@ -68,7 +67,6 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable,  Ownable, RoyaltiesV2
     function uri(uint256 tokenId) public view virtual override returns (string memory) {
         return _tokenURIs[tokenId];
     }
-
 
     function supportsInterface(bytes4 interfaceId)
         public

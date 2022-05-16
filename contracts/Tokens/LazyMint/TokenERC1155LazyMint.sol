@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../../royalties/impl/RoyaltiesV2Impl.sol";
+import "../../royalties/impl/RoyaltiesV2impl.sol";
 import "./signtureEIP712/signtureERC1155.sol";
 import "../../royalties/LibRoyality.sol";
 import "../../royalties/LibRoyaltiesV2.sol";
@@ -84,7 +84,7 @@ contract TokenERC1155LazyMint is ERC1155, ERC1155Burnable, Ownable, AccessContro
 
     function setTokenURI(uint256 tokenId, string memory _uri) public onlyOwner {
         _tokenURIs[tokenId] = _uri;
-        emit URI(_tokenURI(tokenId), tokenId);
+        emit URI(uri(tokenId), tokenId);
     }
 
     function uri(uint256 tokenId) public view virtual override returns (string memory) {

@@ -5,7 +5,6 @@ import "../LibAsset.sol";
 
 abstract contract IOrder {
 
-  
   function isApproved(LibAsset.Asset memory _asset) internal virtual;
 
 }

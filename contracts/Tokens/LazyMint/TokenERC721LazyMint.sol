@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 import "./signtureEIP712/signtureERC721.sol";
-import "../../royalties/impl/RoyaltiesV2Impl.sol";
+import "../../royalties/impl/RoyaltiesV2impl.sol";
 import "../../royalties/LibRoyality.sol";
 import "../../royalties/LibRoyaltiesV2.sol";
 
@@ -55,7 +55,7 @@ contract TokenERC721LazyMint is ERC721URIStorage, ERC721Burnable, RoyaltiesV2Imp
         super._burn(tokenId);
     }
 
-    function lazyMint(address redeemer, signtureEIP721.NFTVoucher calldata voucher, bytes memory signature) public payable {
+    function lazyMint(address redeemer, NFTVoucher calldata voucher, bytes memory signature) public payable {
         address signer = _verify(voucher, signature);
 
         require(hasRole(MINTER_ROLE, signer), "Invalid signature - unknown signer");

@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "../royalties/impl/RoyaltiesV2Impl.sol";
+import "../royalties/impl/RoyaltiesV2impl.sol";
 import "../royalties/LibRoyality.sol";
 import "../royalties/LibRoyaltiesV2.sol";
 

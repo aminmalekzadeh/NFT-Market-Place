@@ -17,7 +17,6 @@ import "./Lib/Order.sol";
 import "./Lib/State.sol";
 import "./Lib/Validate.sol";
 import "./Lib/interface/ITransferManager.sol";
-// import "./Lib/TransferManager.sol";
 import "./Lib/interface/IOrder.sol";
 import "../royalties/IERC2981Royalties.sol";
 
@@ -28,14 +27,24 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
   using SafeMath for uint;
   Counters.Counter private _itemCounter; //start from 1
   Counters.Counter private _itemSoldCounter;
-
-  address payable recieverRoyalty;
-
+  Counters.Counter private _itemBidCounter;
+  IERC2981Royalties royalties;
       
   using LibTransfer for address;
-  uint fee;
 
-  mapping(uint256 => Order.OrderItem) private orderItems;
+  mapping(uint256 => Order.OrderItem) public orderItems;
+  mapping(uint256 => BidList) public bidItems;
+
+
+   struct BidList {
+    uint id;
+    uint marketItemId;
+    LibAsset.Asset sellerAsset;
+    LibAsset.Asset buyerAsset;
+    address bidder;
+    address seller;
+    bool isAccepted;
+   }
 
   event MarketItemCreated (
     uint indexed id,
@@ -46,6 +55,15 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
     uint start,
     uint end,
     State.stateItem state
+  );
+
+   event bidToItem (
+    uint indexed id,
+    LibAsset.Asset sellerAsset,
+    LibAsset.Asset buyerAsset,
+    address bidder,
+    address seller,
+    bool isAccepted
   );
 
   event MarketItemSold (
@@ -94,33 +112,32 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
   }
   
 
-//   function deleteMarketItem(uint256 itemId) public nonReentrant {
-//     require(itemId <= _itemCounter.current(), "id must <= item count");
-//     require(orderItems[itemId].state == State.Created, "item must be on market");
-//     Order storage item = orderItems[itemId];
+  function deleteMarketItem(uint256 itemId) public nonReentrant {
+    require(itemId <= _itemCounter.current(), "id must <= item count");
+    require(orderItems[itemId].state == State.stateItem.Created, "item must be on market");
+    Order.OrderItem storage item = orderItems[itemId];
+    (address token, uint tokenId) = abi.decode(item.sellerAsset.assetType.data, (address, uint));
 
-//     if(item.amount == 0){
-//       require(IERC721(item.nftContract).ownerOf(item.tokenId) == msg.sender, "must be the owner");
-//       require(IERC721(item.nftContract).isApprovedForAll(msg.sender, address(this)), "NFT must be approved to market");
-//     }else {
-//       require(item.amount <= IERC1155(item.nftContract).balanceOf(msg.sender, item.tokenId), "You don't have amount enough of this token");
-//       require(IERC1155(item.nftContract).isApprovedForAll(msg.sender, address(this)), "NFT must be approved to market");
-//     }
+    if(item.sellerAsset.assetType.assetClass == LibAsset.ERC721_ASSET_CLASS){
+      require(IERC721(token).ownerOf(tokenId) == msg.sender, "must be the owner");
+      require(IERC721(token).isApprovedForAll(msg.sender, address(this)), "NFT must be approved to market");
+    }else if(item.sellerAsset.assetType.assetClass == LibAsset.ERC1155_ASSET_CLASS) {
+      require(item.sellerAsset.value <= IERC1155(token).balanceOf(msg.sender, tokenId), "You don't have amount enough of this token");
+      require(IERC1155(token).isApprovedForAll(msg.sender, address(this)), "NFT must be approved to market");
+    }
     
-//     item.state = State.Inactive;
+    item.state = State.stateItem.Inactive;
 
-//     emit MarketItemSold(
-//       itemId,
-//       item.nftContract,
-//       item.tokenId,
-//       item.seller,
-//       address(0),
-//       item.amount,
-//       0,
-//       State.Inactive
-//     );
+    emit MarketItemSold(
+      itemId,
+      item.seller,
+      item.sellerAsset,
+      msg.sender,
+      item.buyerAsset,
+      State.stateItem.Release
+    );
 
-//   }
+  }
 
   function marketSale(uint256 marketItemId, LibAsset.Asset memory _asset) public payable nonReentrant  {
     Order.OrderItem storage item = orderItems[marketItemId];
@@ -128,8 +145,20 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
     validateOrder(item);
     LibAsset.Asset memory matchNFT = item.sellerAsset;
     if(matchNFT.assetType.assetClass == LibAsset.ERC1155_ASSET_CLASS || matchNFT.assetType.assetClass == LibAsset.ERC721_ASSET_CLASS){
-        (address token, uint tokenId) = abi.decode(matchNFT.assetType.data, (address, uint));
-        doTransfer(item, _asset);
+      Order.isApproved(matchNFT);
+      doTransfer(item, _asset);
+      item.state = State.stateItem.Release;
+      _itemSoldCounter.increment(); 
+      item.buyer = payable(msg.sender);
+
+      emit MarketItemSold(
+        marketItemId,
+        item.seller,
+        item.sellerAsset,
+        msg.sender,
+        item.buyerAsset,
+        State.stateItem.Release
+      ); 
     }
   } 
 
@@ -139,122 +168,96 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
         LibAsset.Asset memory buyerAsset = order.buyerAsset;
         LibAsset.Asset memory sellerAsset = order.sellerAsset;
         (address token, uint tokenId) = abi.decode(sellerAsset.assetType.data, (address, uint));
+        (address buyToken, uint price) = abi.decode(buyerAsset.assetType.data, (address, uint));
+
         if(sellerAsset.assetType.assetClass == LibAsset.ERC721_ASSET_CLASS){
            IERC721(token).safeTransferFrom(order.seller, order.buyer, tokenId);
         }else if(sellerAsset.assetType.assetClass == LibAsset.ERC1155_ASSET_CLASS){
            IERC1155(token).safeTransferFrom(order.seller, order.buyer, tokenId, sellerAsset.value,
            "0x00");
-           if(_assetBuyer.assetType.assetClass == buyerAsset.assetType.assetClass){
-               if(_assetBuyer.assetType.assetClass == LibAsset.ERC20_ASSET_CLASS){
-                (address tokenAddress) = abi.decode(_assetBuyer.assetType.data, (address));
-                IERC20(tokenAddress).transfer(order.seller, _assetBuyer.value);
-               }else if(_assetBuyer.assetType.assetClass == LibAsset.ETH_ASSET_CLASS) {
-                address(order.seller).transferEth(_assetBuyer.value);
-               }
-            }
         }
+
+        require(_assetBuyer.assetType.assetClass == buyerAsset.assetType.assetClass, "please check asset for buy again");
+        (address royaltyReciever, uint royaltyValue) = royalties.royaltyInfo(tokenId, sellerAsset.value);
+        
+        if(_assetBuyer.assetType.assetClass == LibAsset.ERC20_ASSET_CLASS){
+          checkBalanceERC20(buyToken, price, msg.sender);
+           uint256 priceWithRoyalty = _assetBuyer.value.sub(royaltyValue);
+           uint256 finalPrice = priceWithRoyalty.sub(protcolfee);
+           TransferFeeMarketOwner(_assetBuyer);
+           IERC20(buyToken).transfer(order.seller, finalPrice);
+           IERC20(buyToken).transfer(royaltyReciever, royaltyValue);
+        }else if(_assetBuyer.assetType.assetClass == LibAsset.ETH_ASSET_CLASS) {
+           require(msg.value == _assetBuyer.value, "you don't have ether enough");
+           uint256 priceWithRoyalty = msg.value.sub(royaltyValue);
+           uint256 finalPrice = priceWithRoyalty.sub(protcolfee);
+           TransferFeeMarketOwner(_assetBuyer);
+           address(order.seller).transferEth(finalPrice);
+           address(royaltyReciever).transferEth(royaltyValue);
+        }
+   }
+
+    function setBid(BidList memory _bidItem) public {
+        Order.OrderItem storage marketitem = orderItems[_bidItem.marketItemId];
+        require(_bidItem.marketItemId == marketitem.id , "Not found this item in market");
+        validateOrder(marketitem);
+        _itemBidCounter.increment();
+        uint256 id = _itemBidCounter.current();
+
+        bidItems[id] = BidList(
+          id,
+          marketitem.id,
+          marketitem.sellerAsset,
+          marketitem.buyerAsset,
+          address(msg.sender),
+          marketitem.seller,
+          false
+        );
+
+        emit bidToItem(
+        id,
+        marketitem.sellerAsset,
+        marketitem.buyerAsset,  
+        address(msg.sender),
+        marketitem.seller,
+        false
+        );
     }
 
-//   function createMarketSaleERC721(
-//     uint256 marketItemId
-//   ) public payable nonReentrant {
+    function getTotalBids() public view returns (uint256) { return _itemBidCounter.current(); }
 
-//     uint price = item.price;
-//     uint tokenId = item.tokenId;
-//     address ERC20Token = item.ERC20Token;
+    function acceptBidByOwner(uint256 _bidItemId) public {
+        BidList storage Biditem = bidItems[_bidItemId];
+        Order.OrderItem storage marketitem = orderItems[Biditem.marketItemId];
 
+        (address token, uint tokenId) = abi.decode(Biditem.sellerAsset.assetType.data, (address, uint));
+        (address buyToken, uint price) = abi.decode(Biditem.buyerAsset.assetType.data, (address, uint));
 
-//     if(address(0) == ERC20Token){
-//      require(msg.value == price, "Please submit the asking price");
-//     }else {
-//       checkBalanceERC20(ERC20Token,price,address(msg.sender));
-//     }
+        require(IERC721(token).ownerOf(tokenId) == address(msg.sender) , "you should be owner this token id");
+        require(IERC721(token).isApprovedForAll(msg.sender, address(this)), "NFT must be approved to market");
+        checkBalanceERC20(buyToken, price, address(Biditem.bidder));
 
-//     require(IERC721(nftContract).isApprovedForAll(item.seller, address(this)), "NFT must be approved to market");
-
-//     TokenERC721 tokenERC721 = TokenERC721(nftContract);
-//     (address receiver, uint royalityAmount) = tokenERC721.royalityInfo(tokenId, price);
+        (address receiver, uint royalityAmount) = royalties.royaltyInfo(tokenId, price);
     
-//     recieverRoyalty = payable(receiver);
-//     IERC721(nftContract).transferFrom(item.seller, msg.sender, tokenId);
+        IERC721(token).transferFrom(msg.sender, Biditem.bidder, tokenId);
     
-//     uint cost = price - royalityAmount;
-//     if(address(0) == ERC20Token){
-//      item.seller.transfer(msg.value.sub(royalityAmount));
-//      transferEth(recieverRoyalty, royalityAmount);
-//     }else{
-//       IERC20(ERC20Token).transferFrom(msg.sender, recieverRoyalty, royalityAmount);
-//       IERC20(ERC20Token).transferFrom(msg.sender, item.seller, cost);
-//     }
+        uint cost = price.sub(royalityAmount);
+        IERC20(buyToken).transferFrom(Biditem.bidder, receiver, royalityAmount);
+        IERC20(buyToken).transferFrom(Biditem.bidder, marketitem.seller, cost);
 
-//     item.buyer = payable(msg.sender);
-//     item.state = State.Release;
-//     _itemSoldCounter.increment();    
+        marketitem.buyer = payable(Biditem.bidder);
+        marketitem.state = State.stateItem.Release;
+        _itemSoldCounter.increment();   
+        Biditem.isAccepted = true; 
 
-//     emit MarketItemSold(
-//       id,
-//       nftContract,
-//       tokenId,
-//       item.seller,
-//       msg.sender,
-//       0,
-//       price,
-//       State.Release
-//     );    
-//   }
-
-
-//   function createMarketSaleERC1155(
-//     address nftContract,
-//     uint256 id,
-//     uint amount
-//   ) public payable nonReentrant {
-
-//     Order storage item = marketItems[id]; //should use storge!!!!
-//     uint price = item.price;
-//     uint tokenId = item.tokenId;
-//     address ERC20Token = item.ERC20Token;
-
-//     require(amount <= IERC1155(nftContract).balanceOf(item.seller, tokenId), "You don't have amount enough of this token");
-//     validateFixPrice(item);
-
-//     if(address(0) == ERC20Token){
-//      require(msg.value == price, "Please submit the asking price");
-//     }else {
-//       require(checkBalanceERC20(ERC20Token,price,address(msg.sender)));
-//     }
-
-//     require(IERC1155(nftContract).isApprovedForAll(item.seller, address(this)), "NFT must be approved to market");
-
-//     TokenERC1155 token1155 = TokenERC1155(nftContract);
-//     (address receiver, uint royalityAmount) = token1155.royalityInfo(tokenId, price);
-    
-//     recieverRoyalty = payable(receiver);
-//     IERC1155(nftContract).safeTransferFrom(item.seller, msg.sender, tokenId, amount, "");
-    
-//     uint cost = price - royalityAmount;
-//     if(address(0) == ERC20Token){
-//      item.seller.transfer(msg.value.sub(royalityAmount));
-//      transferEth(recieverRoyalty, royalityAmount);
-//     }else{
-//       IERC20(ERC20Token).transferFrom(msg.sender, recieverRoyalty, royalityAmount);
-//       IERC20(ERC20Token).transferFrom(msg.sender, item.seller, cost);
-//     }
-
-//     item.buyer = payable(msg.sender);
-//     item.state = State.Release;
-//     _itemSoldCounter.increment();    
-
-//     emit MarketItemSold(
-//       id,
-//       nftContract,
-//       tokenId,
-//       item.seller,
-//       msg.sender,
-//       amount,
-//       price,
-//       State.Release
-//     );    
-//   }
+        emit MarketItemSold(
+        marketitem.id,
+        marketitem.seller,
+        marketitem.sellerAsset,
+        msg.sender,
+        marketitem.buyerAsset,
+        State.stateItem.Release
+      ); 
+    }
 
 }
