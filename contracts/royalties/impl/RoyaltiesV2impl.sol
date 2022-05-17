@@ -3,8 +3,9 @@ pragma solidity  ^0.8.0;
 
 import "./AbstractRoyalties.sol";
 import "../RoyaltiesV2.sol";
+import "../IERC2981Royalties.sol";
 
-contract RoyaltiesV2Impl is AbstractRoyalties, RoyaltiesV2, IERC2981Royalties {
+contract RoyaltiesV2impl is AbstractRoyalties, RoyaltiesV2, IERC2981Royalties {
 
     function getRaribleV2Royalties(uint256 id) override external view returns (LibRoyality.Part[] memory) {
         return royalties[id];
@@ -15,6 +16,7 @@ contract RoyaltiesV2Impl is AbstractRoyalties, RoyaltiesV2, IERC2981Royalties {
     }
 
     function royaltyInfo(uint256 _tokenId, uint256 _value)
+        override
         external
         view
         returns (address _receiver, uint256 _royaltyAmount)

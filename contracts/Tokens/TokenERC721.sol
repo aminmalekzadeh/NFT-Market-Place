@@ -11,7 +11,7 @@ import "../royalties/impl/RoyaltiesV2impl.sol";
 import "../royalties/LibRoyality.sol";
 import "../royalties/LibRoyaltiesV2.sol";
 
-contract TokenERC721 is ERC721URIStorage, ERC721Burnable, RoyaltiesV2Impl, Ownable, AccessControl {
+contract TokenERC721 is ERC721URIStorage, ERC721Burnable, RoyaltiesV2impl, Ownable, AccessControl {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
     address public contractAddress;

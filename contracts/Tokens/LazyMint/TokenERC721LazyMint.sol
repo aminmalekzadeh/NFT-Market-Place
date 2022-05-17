@@ -14,7 +14,7 @@ import "../../royalties/impl/RoyaltiesV2impl.sol";
 import "../../royalties/LibRoyality.sol";
 import "../../royalties/LibRoyaltiesV2.sol";
 
-contract TokenERC721LazyMint is ERC721URIStorage, ERC721Burnable, RoyaltiesV2Impl, Ownable, signtureERC721, AccessControl {
+contract TokenERC721LazyMint is ERC721URIStorage, ERC721Burnable, RoyaltiesV2impl, Ownable, signtureERC721, AccessControl {
     using ECDSA for bytes32;
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
