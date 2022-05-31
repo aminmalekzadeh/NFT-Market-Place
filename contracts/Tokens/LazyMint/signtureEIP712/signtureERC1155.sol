@@ -25,7 +25,7 @@ contract signtureERC1155 {
         );  
     }
 
-
+// fix NFTvouncher
   function _verify(
     uint8 v,
     bytes32 r,
