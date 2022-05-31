@@ -75,10 +75,14 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
     State.stateItem state
   );
 
+   function createMarketItem(
+     LibAsset.Asset memory _sellerAsset,
+     LibAsset.Asset memory _buyerAsset,
+     uint _start,
+     uint _end
+   ) public {
 
-   function createMarketItem(Order.OrderItem memory _order) public {
-
-     Order.isApproved(_order.sellerAsset);
+     Order.isApproved(_sellerAsset);
 
      _itemCounter.increment();
      uint256 id = _itemCounter.current();
@@ -86,22 +90,22 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
      orderItems[id] = Order.OrderItem(
       id,
       payable(msg.sender),
-      _order.sellerAsset,
+      _sellerAsset,
       payable(address(0)),
-      _order.buyerAsset,
-      _order.start,
-      _order.end,
+      _buyerAsset,
+      _start,
+      _end,
       State.stateItem.Created
      );
     
     emit MarketItemCreated(
       id,
       msg.sender,
-      _order.sellerAsset,
+      _sellerAsset,
       address(0),
-      _order.buyerAsset,
-      _order.start,
-      _order.end,
+      _buyerAsset,
+      _start,
+      _end,
       State.stateItem.Created
     );
   }  
@@ -145,7 +149,7 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
     validateOrder(item);
     LibAsset.Asset memory matchNFT = item.sellerAsset;
     if(matchNFT.assetType.assetClass == LibAsset.ERC1155_ASSET_CLASS || matchNFT.assetType.assetClass == LibAsset.ERC721_ASSET_CLASS){
-      Order.isApproved(matchNFT);
+      // Order.isApproved(matchNFT);
       doTransfer(item, _asset);
       item.state = State.stateItem.Release;
       _itemSoldCounter.increment(); 
@@ -168,12 +172,12 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
         LibAsset.Asset memory buyerAsset = order.buyerAsset;
         LibAsset.Asset memory sellerAsset = order.sellerAsset;
         (address token, uint tokenId) = abi.decode(sellerAsset.assetType.data, (address, uint));
-        (address buyToken, uint price) = abi.decode(buyerAsset.assetType.data, (address, uint));
+        (address buyToken) = abi.decode(buyerAsset.assetType.data, (address));
 
         if(sellerAsset.assetType.assetClass == LibAsset.ERC721_ASSET_CLASS){
-           IERC721(token).safeTransferFrom(order.seller, order.buyer, tokenId);
+           IERC721(token).safeTransferFrom(order.seller, msg.sender, tokenId);
         }else if(sellerAsset.assetType.assetClass == LibAsset.ERC1155_ASSET_CLASS){
-           IERC1155(token).safeTransferFrom(order.seller, order.buyer, tokenId, sellerAsset.value,
+           IERC1155(token).safeTransferFrom(order.seller, msg.sender, tokenId, sellerAsset.value,
            "0x00");
         }
 
@@ -181,12 +185,12 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
         (address royaltyReciever, uint royaltyValue) = royalties.royaltyInfo(tokenId, sellerAsset.value);
         
         if(_assetBuyer.assetType.assetClass == LibAsset.ERC20_ASSET_CLASS){
-          checkBalanceERC20(buyToken, price, msg.sender);
+          checkBalanceERC20(buyToken, buyerAsset.value, msg.sender);
            uint256 priceWithRoyalty = _assetBuyer.value.sub(royaltyValue);
            uint256 finalPrice = priceWithRoyalty.sub(protcolfee);
            TransferFeeMarketOwner(_assetBuyer);
-           IERC20(buyToken).transfer(order.seller, finalPrice);
-           IERC20(buyToken).transfer(royaltyReciever, royaltyValue);
+           IERC20(buyToken).transferFrom(msg.sender, order.seller, finalPrice);
+           IERC20(buyToken).transferFrom(msg.sender, royaltyReciever, royaltyValue);
         }else if(_assetBuyer.assetType.assetClass == LibAsset.ETH_ASSET_CLASS) {
            require(msg.value == _assetBuyer.value, "you don't have ether enough");
            uint256 priceWithRoyalty = msg.value.sub(royaltyValue);

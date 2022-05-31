@@ -1,13 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-
-import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
-
-abstract contract signtureERC1155 is EIP712 {
-    using ECDSA for bytes32;
-
+contract signtureERC1155 {
 
     struct NFTVoucher {
         uint256 tokenId;
@@ -17,27 +11,38 @@ abstract contract signtureERC1155 is EIP712 {
         string uri;
     }
 
-    constructor ()
-     EIP712("LazyNFT-Voucher", "1") 
-    {
-      
+    function _hashDomain() internal view returns (bytes32) {
+        return keccak256(
+        abi.encode(
+            keccak256(
+                "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
+            ),
+            keccak256(bytes("LazyNFT-Voucher")),
+            keccak256(bytes("1")),
+            block.chainid,
+            address(this)
+           )
+        );  
     }
 
-    function _hash(NFTVoucher calldata voucher) internal view returns (bytes32) {
-        return _hashTypedDataV4(keccak256(abi.encode(
-           keccak256("NFTVoucher(uint256 tokenId,uint256 minPrice,uint256 supply,address account,string uri)"),
+
+  function _verify(
+    uint8 v,
+    bytes32 r,
+    bytes32 s,
+    NFTVoucher calldata voucher
+  ) public view returns(address) {
+    bytes32 eip712DomainHash = _hashDomain();
+    bytes32 hashStruct = keccak256(abi.encode(
+           keccak256("NFTVoucher(uint256 tokenId,uint256 minPrice,string uri)"),
            voucher.tokenId,
            voucher.minPrice,
-           voucher.supply,
-           voucher.account,
            keccak256(bytes(voucher.uri))
-        )));
-    }
+        ));
 
-
-    function _verify(NFTVoucher calldata voucher, bytes memory signature) internal view returns (address) {
-        bytes32 digest = _hash(voucher);
-        return digest.toEthSignedMessageHash().recover(signature);
-    }
+    bytes32 hash = keccak256(abi.encodePacked("\x19\x01", eip712DomainHash, hashStruct));
+    address signer = ecrecover(hash, v, r, s);
+    return signer;
+  }
 
 }
