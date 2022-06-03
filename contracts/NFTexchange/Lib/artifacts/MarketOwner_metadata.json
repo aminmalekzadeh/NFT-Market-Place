@@ -1,0 +1,206 @@
+{
+	"compiler": {
+		"version": "0.8.14+commit.80d49f37"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct LibAsset.Asset",
+						"name": "_asset",
+						"type": "tuple"
+					}
+				],
+				"name": "TransferFeeMarketOwner",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renounceOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_fee",
+						"type": "uint256"
+					}
+				],
+				"name": "updateFeeMarket",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"owner()": {
+					"details": "Returns the address of the current owner."
+				},
+				"renounceOwnership()": {
+					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+				},
+				"transferOwnership(address)": {
+					"details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/NFTexchange/Lib/MarketOwner.sol": "MarketOwner"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/access/Ownable.sol": {
+			"keccak256": "0x24e0364e503a9bbde94c715d26573a76f14cd2a202d45f96f52134ab806b67b9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e12cbaa7378fd9b62280e4e1d164bedcb4399ce238f5f98fc0eefb7e50577981",
+				"dweb:/ipfs/QmXRoFGUgfsaRkoPT5bxNMtSayKTQ8GZATLPXf69HcRA51"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34",
+				"dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr"
+			]
+		},
+		"@openzeppelin/contracts/utils/Context.sol": {
+			"keccak256": "0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92",
+				"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3"
+			]
+		},
+		"contracts/NFTexchange/Lib/LibAsset.sol": {
+			"keccak256": "0x3a1b743dbfa27101d1a564dff2b53efdb9591140a4161586bcdc842e567fe8a1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4ce54bd18193801b3f5019f0004c78c141ba8143b31878f6c2870d26806f78a7",
+				"dweb:/ipfs/QmNcAzJhaU1W9CVj2xJxA6ZLziwzN7fnF7T6ZUeqf8eHBd"
+			]
+		},
+		"contracts/NFTexchange/Lib/LibTransfer.sol": {
+			"keccak256": "0xcb3f8cc89a6f53f1d71f24f71d1775eca14cd10b85c09b5b5dbf99cf6c2b64f5",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5b9cfe4d800a25ae65f4a962e8a4e40d78ba6f7ca25afbfc354d4b2cf498dfb5",
+				"dweb:/ipfs/QmWQndrMz9upUWSsJnsiL2oZMcyH1pTzSVK4DrTRcnxpYb"
+			]
+		},
+		"contracts/NFTexchange/Lib/MarketOwner.sol": {
+			"keccak256": "0xce7841563a8bda36be8ac573426f52dcd3c0a70a12e39a5be3da77d6f79e6e0d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4a0b8b662d21f0b73701a4ea6bc44387ff70baf70048b585185449d126e09eab",
+				"dweb:/ipfs/QmSpY244nUTCwR59pjpsjES9Nkf9Zht7Me3vtHXqYUAu1s"
+			]
+		},
+		"contracts/NFTexchange/Lib/interface/IMarketOwner.sol": {
+			"keccak256": "0x52ec4070fce9244df6de5ee8e49117f9a692fede8dc1d5d3bef42bab139d001e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f507f96e956047a51ad73dc7d98303f6c3ffaaac32179a46db586a01d02e94f4",
+				"dweb:/ipfs/QmYcWQFhyD3fxNSkAJ86URipJiCRjE9oU8jpWBcazvXSyq"
+			]
+		}
+	},
+	"version": 1
+}

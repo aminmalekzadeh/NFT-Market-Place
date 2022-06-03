@@ -22,7 +22,7 @@ library LibAsset {
 
     struct Asset {
         AssetType assetType;
-        uint value;
+        uint256 value;
     }
 
     function hash(AssetType memory assetType) internal pure returns (bytes32) {

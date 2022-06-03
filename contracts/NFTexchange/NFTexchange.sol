@@ -24,7 +24,7 @@ import "../royalties/IERC2981Royalties.sol";
 contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
   
   using Counters for Counters.Counter;
-  using SafeMath for uint;
+  using SafeMath for uint256;
   Counters.Counter private _itemCounter; //start from 1
   Counters.Counter private _itemSoldCounter;
   Counters.Counter private _itemBidCounter;
@@ -143,14 +143,14 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
 
   }
 
-  function marketSale(uint256 marketItemId, LibAsset.Asset memory _asset) public payable nonReentrant  {
+  function marketSale(uint256 marketItemId) public payable nonReentrant  {
     Order.OrderItem storage item = orderItems[marketItemId];
     checkStatusItem(item);
     validateOrder(item);
     LibAsset.Asset memory matchNFT = item.sellerAsset;
-    if(matchNFT.assetType.assetClass == LibAsset.ERC1155_ASSET_CLASS || matchNFT.assetType.assetClass == LibAsset.ERC721_ASSET_CLASS){
+    require(matchNFT.assetType.assetClass == LibAsset.ERC1155_ASSET_CLASS || matchNFT.assetType.assetClass == LibAsset.ERC721_ASSET_CLASS, "Asset type is invalid");
       // Order.isApproved(matchNFT);
-      doTransfer(item, _asset);
+      doTransfer(item);
       item.state = State.stateItem.Release;
       _itemSoldCounter.increment(); 
       item.buyer = payable(msg.sender);
@@ -163,12 +163,11 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
         item.buyerAsset,
         State.stateItem.Release
       ); 
-    }
   } 
 
 
 
-   function doTransfer(Order.OrderItem memory order, LibAsset.Asset memory _assetBuyer) private {
+   function doTransfer(Order.OrderItem memory order) private {
         LibAsset.Asset memory buyerAsset = order.buyerAsset;
         LibAsset.Asset memory sellerAsset = order.sellerAsset;
         (address token, uint tokenId) = abi.decode(sellerAsset.assetType.data, (address, uint));
@@ -181,24 +180,29 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
            "0x00");
         }
 
-        require(_assetBuyer.assetType.assetClass == buyerAsset.assetType.assetClass, "please check asset for buy again");
-        (address royaltyReciever, uint royaltyValue) = royalties.royaltyInfo(tokenId, sellerAsset.value);
+        (address royaltyReciever, uint royaltyValue) = IERC2981Royalties(token).royaltyInfo(tokenId, sellerAsset.value);
         
-        if(_assetBuyer.assetType.assetClass == LibAsset.ERC20_ASSET_CLASS){
+        if(buyerAsset.assetType.assetClass == LibAsset.ERC20_ASSET_CLASS){
           checkBalanceERC20(buyToken, buyerAsset.value, msg.sender);
-           uint256 priceWithRoyalty = _assetBuyer.value.sub(royaltyValue);
+           uint256 priceWithRoyalty = buyerAsset.value.sub(royaltyValue);
            uint256 finalPrice = priceWithRoyalty.sub(protcolfee);
-           TransferFeeMarketOwner(_assetBuyer);
-           IERC20(buyToken).transferFrom(msg.sender, order.seller, finalPrice);
+           TransferFeeMarketOwner(buyerAsset);
+           IERC20(buyToken).transferFrom(msg.sender, order.seller, priceWithRoyalty);
            IERC20(buyToken).transferFrom(msg.sender, royaltyReciever, royaltyValue);
-        }else if(_assetBuyer.assetType.assetClass == LibAsset.ETH_ASSET_CLASS) {
-           require(msg.value == _assetBuyer.value, "you don't have ether enough");
-           uint256 priceWithRoyalty = msg.value.sub(royaltyValue);
+        }else if(buyerAsset.assetType.assetClass == LibAsset.ETH_ASSET_CLASS) {
+           require(msg.value > 0, "wei can't be zero");
+           require(msg.value >= buyerAsset.value, "you don't have ether enough");
+           uint256 priceWithRoyalty = buyerAsset.value - royaltyValue;
            uint256 finalPrice = priceWithRoyalty.sub(protcolfee);
-           TransferFeeMarketOwner(_assetBuyer);
-           address(order.seller).transferEth(finalPrice);
+           TransferFeeMarketOwner(buyerAsset);
+           address(order.seller).transferEth(buyerAsset.value);
            address(royaltyReciever).transferEth(royaltyValue);
         }
+   }
+
+   function checkRoyalty(address token, uint256 tokenId, uint256 price) public view returns(address, uint) {
+      (address royaltyReciever, uint royaltyValue) = IERC2981Royalties(token).royaltyInfo(tokenId, price);
+      return (royaltyReciever, royaltyValue);
    }
 
     function setBid(BidList memory _bidItem) public {

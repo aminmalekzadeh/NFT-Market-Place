@@ -1,0 +1,305 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"ropsten:3": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"rinkeby:4": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"kovan:42": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"görli:5": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"linkReferences": {},
+			"object": "61014a61003a600b82828239805160001a60731461002d57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600436106100565760003560e01c8063405bf2751461005b5780636cd2c30a1461009f578063b4797da2146100c6578063c214be59146100ed575b600080fd5b6100827f973bb64086f173ec8099b7ed3d43da984f4a332e4417a08bc6a286e6402b058681565b6040516001600160e01b0319909116815260200160405180910390f35b6100827f8ae85d849167ff996c04040c44924fd364217285e4cad818292c7ac37c0a345b81565b6100827faaaebeba3810b1e6b70781f14b2d72c1cb89c0b2b320c43bb67ff79f562f5ff481565b6100827f73ad2146b3d3a286642c794379d750360a2d53a3459a11b3e5d6cc900f55f44a8156fea264697066735822122039f4ccce1bd7ee3c33b0e9526d22b6468722d4001a393ef79c2dc86d760c4e6364736f6c634300080e0033",
+			"opcodes": "PUSH2 0x14A PUSH2 0x3A PUSH1 0xB DUP3 DUP3 DUP3 CODECOPY DUP1 MLOAD PUSH1 0x0 BYTE PUSH1 0x73 EQ PUSH2 0x2D JUMPI PUSH4 0x4E487B71 PUSH1 0xE0 SHL PUSH1 0x0 MSTORE PUSH1 0x0 PUSH1 0x4 MSTORE PUSH1 0x24 PUSH1 0x0 REVERT JUMPDEST ADDRESS PUSH1 0x0 MSTORE PUSH1 0x73 DUP2 MSTORE8 DUP3 DUP2 RETURN INVALID PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH1 0x4 CALLDATASIZE LT PUSH2 0x56 JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x405BF275 EQ PUSH2 0x5B JUMPI DUP1 PUSH4 0x6CD2C30A EQ PUSH2 0x9F JUMPI DUP1 PUSH4 0xB4797DA2 EQ PUSH2 0xC6 JUMPI DUP1 PUSH4 0xC214BE59 EQ PUSH2 0xED JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH2 0x82 PUSH32 0x973BB64086F173EC8099B7ED3D43DA984F4A332E4417A08BC6A286E6402B0586 DUP2 JUMP JUMPDEST PUSH1 0x40 MLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xE0 SHL SUB NOT SWAP1 SWAP2 AND DUP2 MSTORE PUSH1 0x20 ADD PUSH1 0x40 MLOAD DUP1 SWAP2 SUB SWAP1 RETURN JUMPDEST PUSH2 0x82 PUSH32 0x8AE85D849167FF996C04040C44924FD364217285E4CAD818292C7AC37C0A345B DUP2 JUMP JUMPDEST PUSH2 0x82 PUSH32 0xAAAEBEBA3810B1E6B70781F14B2D72C1CB89C0B2B320C43BB67FF79F562F5FF4 DUP2 JUMP JUMPDEST PUSH2 0x82 PUSH32 0x73AD2146B3D3A286642C794379D750360A2D53A3459A11B3E5D6CC900F55F44A DUP2 JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 CODECOPY DELEGATECALL 0xCC 0xCE SHL 0xD7 0xEE EXTCODECOPY CALLER 0xB0 0xE9 MSTORE PUSH14 0x22B6468722D4001A393EF79C2DC8 PUSH14 0x760C4E6364736F6C634300080E00 CALLER ",
+			"sourceMap": "57:1225:0:-:0;;;;;;;;;;;;;;;-1:-1:-1;;;57:1225:0;;;;;;;;;;;;;;;;;"
+		},
+		"deployedBytecode": {
+			"functionDebugData": {
+				"@ERC1155_ASSET_CLASS_33": {
+					"entryPoint": null,
+					"id": 33,
+					"parameterSlots": 0,
+					"returnSlots": 0
+				},
+				"@ERC20_ASSET_CLASS_17": {
+					"entryPoint": null,
+					"id": 17,
+					"parameterSlots": 0,
+					"returnSlots": 0
+				},
+				"@ERC721_ASSET_CLASS_25": {
+					"entryPoint": null,
+					"id": 25,
+					"parameterSlots": 0,
+					"returnSlots": 0
+				},
+				"@ETH_ASSET_CLASS_9": {
+					"entryPoint": null,
+					"id": 9,
+					"parameterSlots": 0,
+					"returnSlots": 0
+				},
+				"abi_encode_tuple_t_bytes4__to_t_bytes4__fromStack_library_reversed": {
+					"entryPoint": null,
+					"id": null,
+					"parameterSlots": 2,
+					"returnSlots": 1
+				}
+			},
+			"generatedSources": [
+				{
+					"ast": {
+						"nodeType": "YulBlock",
+						"src": "0:226:1",
+						"statements": [
+							{
+								"nodeType": "YulBlock",
+								"src": "6:3:1",
+								"statements": []
+							},
+							{
+								"body": {
+									"nodeType": "YulBlock",
+									"src": "121:103:1",
+									"statements": [
+										{
+											"nodeType": "YulAssignment",
+											"src": "131:26:1",
+											"value": {
+												"arguments": [
+													{
+														"name": "headStart",
+														"nodeType": "YulIdentifier",
+														"src": "143:9:1"
+													},
+													{
+														"kind": "number",
+														"nodeType": "YulLiteral",
+														"src": "154:2:1",
+														"type": "",
+														"value": "32"
+													}
+												],
+												"functionName": {
+													"name": "add",
+													"nodeType": "YulIdentifier",
+													"src": "139:3:1"
+												},
+												"nodeType": "YulFunctionCall",
+												"src": "139:18:1"
+											},
+											"variableNames": [
+												{
+													"name": "tail",
+													"nodeType": "YulIdentifier",
+													"src": "131:4:1"
+												}
+											]
+										},
+										{
+											"expression": {
+												"arguments": [
+													{
+														"name": "headStart",
+														"nodeType": "YulIdentifier",
+														"src": "173:9:1"
+													},
+													{
+														"arguments": [
+															{
+																"name": "value0",
+																"nodeType": "YulIdentifier",
+																"src": "188:6:1"
+															},
+															{
+																"arguments": [
+																	{
+																		"kind": "number",
+																		"nodeType": "YulLiteral",
+																		"src": "200:3:1",
+																		"type": "",
+																		"value": "224"
+																	},
+																	{
+																		"kind": "number",
+																		"nodeType": "YulLiteral",
+																		"src": "205:10:1",
+																		"type": "",
+																		"value": "0xffffffff"
+																	}
+																],
+																"functionName": {
+																	"name": "shl",
+																	"nodeType": "YulIdentifier",
+																	"src": "196:3:1"
+																},
+																"nodeType": "YulFunctionCall",
+																"src": "196:20:1"
+															}
+														],
+														"functionName": {
+															"name": "and",
+															"nodeType": "YulIdentifier",
+															"src": "184:3:1"
+														},
+														"nodeType": "YulFunctionCall",
+														"src": "184:33:1"
+													}
+												],
+												"functionName": {
+													"name": "mstore",
+													"nodeType": "YulIdentifier",
+													"src": "166:6:1"
+												},
+												"nodeType": "YulFunctionCall",
+												"src": "166:52:1"
+											},
+											"nodeType": "YulExpressionStatement",
+											"src": "166:52:1"
+										}
+									]
+								},
+								"name": "abi_encode_tuple_t_bytes4__to_t_bytes4__fromStack_library_reversed",
+								"nodeType": "YulFunctionDefinition",
+								"parameters": [
+									{
+										"name": "headStart",
+										"nodeType": "YulTypedName",
+										"src": "90:9:1",
+										"type": ""
+									},
+									{
+										"name": "value0",
+										"nodeType": "YulTypedName",
+										"src": "101:6:1",
+										"type": ""
+									}
+								],
+								"returnVariables": [
+									{
+										"name": "tail",
+										"nodeType": "YulTypedName",
+										"src": "112:4:1",
+										"type": ""
+									}
+								],
+								"src": "14:210:1"
+							}
+						]
+					},
+					"contents": "{\n    { }\n    function abi_encode_tuple_t_bytes4__to_t_bytes4__fromStack_library_reversed(headStart, value0) -> tail\n    {\n        tail := add(headStart, 32)\n        mstore(headStart, and(value0, shl(224, 0xffffffff)))\n    }\n}",
+					"id": 1,
+					"language": "Yul",
+					"name": "#utility.yul"
+				}
+			],
+			"immutableReferences": {},
+			"linkReferences": {},
+			"object": "73000000000000000000000000000000000000000030146080604052600436106100565760003560e01c8063405bf2751461005b5780636cd2c30a1461009f578063b4797da2146100c6578063c214be59146100ed575b600080fd5b6100827f973bb64086f173ec8099b7ed3d43da984f4a332e4417a08bc6a286e6402b058681565b6040516001600160e01b0319909116815260200160405180910390f35b6100827f8ae85d849167ff996c04040c44924fd364217285e4cad818292c7ac37c0a345b81565b6100827faaaebeba3810b1e6b70781f14b2d72c1cb89c0b2b320c43bb67ff79f562f5ff481565b6100827f73ad2146b3d3a286642c794379d750360a2d53a3459a11b3e5d6cc900f55f44a8156fea264697066735822122039f4ccce1bd7ee3c33b0e9526d22b6468722d4001a393ef79c2dc86d760c4e6364736f6c634300080e0033",
+			"opcodes": "PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH1 0x4 CALLDATASIZE LT PUSH2 0x56 JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x405BF275 EQ PUSH2 0x5B JUMPI DUP1 PUSH4 0x6CD2C30A EQ PUSH2 0x9F JUMPI DUP1 PUSH4 0xB4797DA2 EQ PUSH2 0xC6 JUMPI DUP1 PUSH4 0xC214BE59 EQ PUSH2 0xED JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH2 0x82 PUSH32 0x973BB64086F173EC8099B7ED3D43DA984F4A332E4417A08BC6A286E6402B0586 DUP2 JUMP JUMPDEST PUSH1 0x40 MLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xE0 SHL SUB NOT SWAP1 SWAP2 AND DUP2 MSTORE PUSH1 0x20 ADD PUSH1 0x40 MLOAD DUP1 SWAP2 SUB SWAP1 RETURN JUMPDEST PUSH2 0x82 PUSH32 0x8AE85D849167FF996C04040C44924FD364217285E4CAD818292C7AC37C0A345B DUP2 JUMP JUMPDEST PUSH2 0x82 PUSH32 0xAAAEBEBA3810B1E6B70781F14B2D72C1CB89C0B2B320C43BB67FF79F562F5FF4 DUP2 JUMP JUMPDEST PUSH2 0x82 PUSH32 0x73AD2146B3D3A286642C794379D750360A2D53A3459A11B3E5D6CC900F55F44A DUP2 JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 CODECOPY DELEGATECALL 0xCC 0xCE SHL 0xD7 0xEE EXTCODECOPY CALLER 0xB0 0xE9 MSTORE PUSH14 0x22B6468722D4001A393EF79C2DC8 PUSH14 0x760C4E6364736F6C634300080E00 CALLER ",
+			"sourceMap": "57:1225:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;303:73;;355:20;303:73;;;;;-1:-1:-1;;;;;;184:33:1;;;166:52;;154:2;139:18;303:73:0;;;;;;;151:69;;201:18;151:69;;80:65;;128:16;80:65;;226:71;;277:19;226:71;"
+		},
+		"gasEstimates": {
+			"creation": {
+				"codeDepositCost": "66000",
+				"executionCost": "148",
+				"totalCost": "66148"
+			},
+			"external": {
+				"ERC1155_ASSET_CLASS()": "169",
+				"ERC20_ASSET_CLASS()": "191",
+				"ERC721_ASSET_CLASS()": "235",
+				"ETH_ASSET_CLASS()": "213"
+			},
+			"internal": {
+				"hash(struct LibAsset.Asset memory)": "infinite",
+				"hash(struct LibAsset.AssetType memory)": "infinite"
+			}
+		},
+		"methodIdentifiers": {
+			"ERC1155_ASSET_CLASS()": "405bf275",
+			"ERC20_ASSET_CLASS()": "6cd2c30a",
+			"ERC721_ASSET_CLASS()": "c214be59",
+			"ETH_ASSET_CLASS()": "b4797da2"
+		}
+	},
+	"abi": [
+		{
+			"inputs": [],
+			"name": "ERC1155_ASSET_CLASS",
+			"outputs": [
+				{
+					"internalType": "bytes4",
+					"name": "",
+					"type": "bytes4"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "ERC20_ASSET_CLASS",
+			"outputs": [
+				{
+					"internalType": "bytes4",
+					"name": "",
+					"type": "bytes4"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "ERC721_ASSET_CLASS",
+			"outputs": [
+				{
+					"internalType": "bytes4",
+					"name": "",
+					"type": "bytes4"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "ETH_ASSET_CLASS",
+			"outputs": [
+				{
+					"internalType": "bytes4",
+					"name": "",
+					"type": "bytes4"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		}
+	]
+}

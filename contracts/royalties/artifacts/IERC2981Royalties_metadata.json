@@ -1,0 +1,88 @@
+{
+	"compiler": {
+		"version": "0.8.14+commit.80d49f37"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_value",
+						"type": "uint256"
+					}
+				],
+				"name": "royaltyInfo",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "_receiver",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_royaltyAmount",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "Interface for the ERC2981 - Token Royalty standard",
+			"kind": "dev",
+			"methods": {
+				"royaltyInfo(uint256,uint256)": {
+					"params": {
+						"_tokenId": "- the NFT asset queried for royalty information",
+						"_value": "- the sale price of the NFT asset specified by _tokenId"
+					},
+					"returns": {
+						"_receiver": "- address of who should be sent the royalty payment",
+						"_royaltyAmount": "- the royalty payment amount for value sale price"
+					}
+				}
+			},
+			"title": "IERC2981Royalties",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/royalties/IERC2981Royalties.sol": "IERC2981Royalties"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/royalties/IERC2981Royalties.sol": {
+			"keccak256": "0x5ee1a447c5570dcd1ff4f0e81a62401348e65b5fb886c7d72936e8f497e5a570",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7b9aac0662f874b327bfb9157d9707bf1d0df430c0fed171cfe8c6dd7070f78d",
+				"dweb:/ipfs/QmQLxyipUAWtqgo8qdigFunu7j7FpuzqK779sMUn4X4AHA"
+			]
+		}
+	},
+	"version": 1
+}

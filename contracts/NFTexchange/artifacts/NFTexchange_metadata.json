@@ -1,0 +1,1141 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "seller",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"indexed": false,
+						"internalType": "struct LibAsset.Asset",
+						"name": "sellerAsset",
+						"type": "tuple"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "buyer",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"indexed": false,
+						"internalType": "struct LibAsset.Asset",
+						"name": "buyerAsset",
+						"type": "tuple"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "start",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "end",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "enum State.stateItem",
+						"name": "state",
+						"type": "uint8"
+					}
+				],
+				"name": "MarketItemCreated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "seller",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"indexed": false,
+						"internalType": "struct LibAsset.Asset",
+						"name": "sellerAsset",
+						"type": "tuple"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "buyer",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"indexed": false,
+						"internalType": "struct LibAsset.Asset",
+						"name": "buyerAsset",
+						"type": "tuple"
+					},
+					{
+						"indexed": false,
+						"internalType": "enum State.stateItem",
+						"name": "state",
+						"type": "uint8"
+					}
+				],
+				"name": "MarketItemSold",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"indexed": false,
+						"internalType": "struct LibAsset.Asset",
+						"name": "sellerAsset",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"indexed": false,
+						"internalType": "struct LibAsset.Asset",
+						"name": "buyerAsset",
+						"type": "tuple"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "seller",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "isAccepted",
+						"type": "bool"
+					}
+				],
+				"name": "bidToItem",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct LibAsset.Asset",
+						"name": "_asset",
+						"type": "tuple"
+					}
+				],
+				"name": "TransferFeeMarketOwner",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_bidItemId",
+						"type": "uint256"
+					}
+				],
+				"name": "acceptBidByOwner",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "bidItems",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "marketItemId",
+						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct LibAsset.Asset",
+						"name": "sellerAsset",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct LibAsset.Asset",
+						"name": "buyerAsset",
+						"type": "tuple"
+					},
+					{
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "seller",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "isAccepted",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "ERC20Token",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "buyer",
+						"type": "address"
+					}
+				],
+				"name": "checkBalanceERC20",
+				"outputs": [],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					}
+				],
+				"name": "checkRoyalty",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct LibAsset.Asset",
+						"name": "_sellerAsset",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct LibAsset.Asset",
+						"name": "_buyerAsset",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_start",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_end",
+						"type": "uint256"
+					}
+				],
+				"name": "createMarketItem",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "itemId",
+						"type": "uint256"
+					}
+				],
+				"name": "deleteMarketItem",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getTotalBids",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "marketItemId",
+						"type": "uint256"
+					}
+				],
+				"name": "marketSale",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "orderItems",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address payable",
+						"name": "seller",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct LibAsset.Asset",
+						"name": "sellerAsset",
+						"type": "tuple"
+					},
+					{
+						"internalType": "address payable",
+						"name": "buyer",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "bytes4",
+										"name": "assetClass",
+										"type": "bytes4"
+									},
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct LibAsset.AssetType",
+								"name": "assetType",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct LibAsset.Asset",
+						"name": "buyerAsset",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "start",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "end",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum State.stateItem",
+						"name": "state",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renounceOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "marketItemId",
+								"type": "uint256"
+							},
+							{
+								"components": [
+									{
+										"components": [
+											{
+												"internalType": "bytes4",
+												"name": "assetClass",
+												"type": "bytes4"
+											},
+											{
+												"internalType": "bytes",
+												"name": "data",
+												"type": "bytes"
+											}
+										],
+										"internalType": "struct LibAsset.AssetType",
+										"name": "assetType",
+										"type": "tuple"
+									},
+									{
+										"internalType": "uint256",
+										"name": "value",
+										"type": "uint256"
+									}
+								],
+								"internalType": "struct LibAsset.Asset",
+								"name": "sellerAsset",
+								"type": "tuple"
+							},
+							{
+								"components": [
+									{
+										"components": [
+											{
+												"internalType": "bytes4",
+												"name": "assetClass",
+												"type": "bytes4"
+											},
+											{
+												"internalType": "bytes",
+												"name": "data",
+												"type": "bytes"
+											}
+										],
+										"internalType": "struct LibAsset.AssetType",
+										"name": "assetType",
+										"type": "tuple"
+									},
+									{
+										"internalType": "uint256",
+										"name": "value",
+										"type": "uint256"
+									}
+								],
+								"internalType": "struct LibAsset.Asset",
+								"name": "buyerAsset",
+								"type": "tuple"
+							},
+							{
+								"internalType": "address",
+								"name": "bidder",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "seller",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "isAccepted",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct NFTexchange.BidList",
+						"name": "_bidItem",
+						"type": "tuple"
+					}
+				],
+				"name": "setBid",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_fee",
+						"type": "uint256"
+					}
+				],
+				"name": "updateFeeMarket",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"owner()": {
+					"details": "Returns the address of the current owner."
+				},
+				"renounceOwnership()": {
+					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+				},
+				"transferOwnership(address)": {
+					"details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/NFTexchange/NFTexchange.sol": "NFTexchange"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/access/Ownable.sol": {
+			"keccak256": "0x24e0364e503a9bbde94c715d26573a76f14cd2a202d45f96f52134ab806b67b9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e12cbaa7378fd9b62280e4e1d164bedcb4399ce238f5f98fc0eefb7e50577981",
+				"dweb:/ipfs/QmXRoFGUgfsaRkoPT5bxNMtSayKTQ8GZATLPXf69HcRA51"
+			]
+		},
+		"@openzeppelin/contracts/security/ReentrancyGuard.sol": {
+			"keccak256": "0x0e9621f60b2faabe65549f7ed0f24e8853a45c1b7990d47e8160e523683f3935",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://287a2f8d5814dd0f05f22b740f18ca8321acc21c9bd03a6cb2203ea626e2f3f2",
+				"dweb:/ipfs/QmZRQv9iuwU817VuqkA2WweiaibKii69x9QxYBBEfbNEud"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC1155/IERC1155.sol": {
+			"keccak256": "0x8e93de94c9062ebc94fb7e2e3929b0781ac6a2b7772e2f7a59045861c93e5be9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f920a631bf986c610fe573d3c70a2bb6f224f86f4a8550016470c7ee476c9ab5",
+				"dweb:/ipfs/QmYzsyVMfnaREKHcHv5RPS8Xg5r1Q38E2SDsGBTnXeFWzb"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/ERC20.sol": {
+			"keccak256": "0xe0c8b625a79bac0fe80f17cfb521e072805cc9cef1c96a5caf45b264e74812fa",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://12fd1efc9ad061ef675bd50fb0c8e3c6f2952a09f8df0e3c688b8d81b8918838",
+				"dweb:/ipfs/QmawN6PjTwy91pU7ANjCSgbsLc8TDA6hwu9GsFFaNSuhb5"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34",
+				"dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
+			"keccak256": "0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5a376d3dda2cb70536c0a45c208b29b34ac560c4cb4f513a42079f96ba47d2dd",
+				"dweb:/ipfs/QmZQg6gn1sUpM8wHzwNvSnihumUCAhxD119MpXeKp8B9s8"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/ERC721.sol": {
+			"keccak256": "0x921f012325281f7d81e29c53a13824cf6c2c5d77232065d0d4f3f912e97af6ea",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7dbcedc364fce0ab5e54d21d4cbd91a97959f52c0674cf5c36a314bb58308f62",
+				"dweb:/ipfs/QmfYpqHKtu3bSQ9FGvLwzdxRNykStpVPtoLNTaM1KBKj6E"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/IERC721.sol": {
+			"keccak256": "0x0d4de01fe5360c38b4ad2b0822a12722958428f5138a7ff47c1720eb6fa52bba",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://77724cecdfba8814632ab58737c2b0f2d4ad2d532bc614aee559b5593c1152f0",
+				"dweb:/ipfs/QmUcE6gXyv7CQh4sUdcDABYKGTovTe1zLMZSEq95nkc3ph"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol": {
+			"keccak256": "0xa82b58eca1ee256be466e536706850163d2ec7821945abd6b4778cfb3bee37da",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6e75cf83beb757b8855791088546b8337e9d4684e169400c20d44a515353b708",
+				"dweb:/ipfs/QmYvPafLfoquiDMEj7CKHtvbgHu7TJNPSVPSCjrtjV8HjV"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {
+			"keccak256": "0x75b829ff2f26c14355d1cba20e16fe7b29ca58eb5fef665ede48bc0f9c6c74b9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a0a107160525724f9e1bbbab031defc2f298296dd9e331f16a6f7130cec32146",
+				"dweb:/ipfs/QmemujxSd7gX8A9M8UwmNbz4Ms3U9FG9QfudUgxwvTmPWf"
+			]
+		},
+		"@openzeppelin/contracts/utils/Address.sol": {
+			"keccak256": "0x2ccf9d2313a313d41a791505f2b5abfdc62191b5d4334f7f7a82691c088a1c87",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b3a57d0854b2fdce6ebff933a48dca2445643d1eccfc27f00292e937f26c6a58",
+				"dweb:/ipfs/QmW45rZooS9TqR4YXUbjRbtf2Bpb5ouSarBvfW1LdGprvV"
+			]
+		},
+		"@openzeppelin/contracts/utils/Context.sol": {
+			"keccak256": "0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92",
+				"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3"
+			]
+		},
+		"@openzeppelin/contracts/utils/Counters.sol": {
+			"keccak256": "0xf0018c2440fbe238dd3a8732fa8e17a0f9dce84d31451dc8a32f6d62b349c9f1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://59e1c62884d55b70f3ae5432b44bb3166ad71ae3acd19c57ab6ddc3c87c325ee",
+				"dweb:/ipfs/QmezuXg5GK5oeA4F91EZhozBFekhq5TD966bHPH18cCqhu"
+			]
+		},
+		"@openzeppelin/contracts/utils/Strings.sol": {
+			"keccak256": "0x32c202bd28995dd20c4347b7c6467a6d3241c74c8ad3edcbb610cd9205916c45",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8179c356adb19e70d6b31a1eedc8c5c7f0c00e669e2540f4099e3844c6074d30",
+				"dweb:/ipfs/QmWFbivarEobbqhS1go64ootVuHfVohBseerYy9FTEd1W2"
+			]
+		},
+		"@openzeppelin/contracts/utils/introspection/ERC165.sol": {
+			"keccak256": "0xd10975de010d89fd1c78dc5e8a9a7e7f496198085c151648f20cba166b32582b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://fb0048dee081f6fffa5f74afc3fb328483c2a30504e94a0ddd2a5114d731ec4d",
+				"dweb:/ipfs/QmZptt1nmYoA5SgjwnSgWqgUSDgm4q52Yos3xhnMv3MV43"
+			]
+		},
+		"@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+			"keccak256": "0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f",
+				"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/SafeMath.sol": {
+			"keccak256": "0x0f633a0223d9a1dcccfcf38a64c9de0874dfcbfac0c6941ccf074d63a2ce0e1e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://864a40efcffdf408044c332a5aa38ec5618ed7b4eecb8f65faf45671bd6cdc65",
+				"dweb:/ipfs/QmQJquTMtc6fgm5JQzGdsGpA2fqBe3MHWEdt2qzaLySMdN"
+			]
+		},
+		"contracts/NFTexchange/Lib/LibAsset.sol": {
+			"keccak256": "0xe3cc994fd15b0be907bfcaed7b4b7daca0b4f332979a531798fc451596bda8d7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d3efa902c0bfbb80c9040941c21ad5c2e7ed5ee1c451354b3ffe788dc6ba4974",
+				"dweb:/ipfs/QmQSA687vBnMQvVwBp8gcVNSFFgiDy8qyvwAoyyk9mvZsN"
+			]
+		},
+		"contracts/NFTexchange/Lib/LibTransfer.sol": {
+			"keccak256": "0xcb3f8cc89a6f53f1d71f24f71d1775eca14cd10b85c09b5b5dbf99cf6c2b64f5",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5b9cfe4d800a25ae65f4a962e8a4e40d78ba6f7ca25afbfc354d4b2cf498dfb5",
+				"dweb:/ipfs/QmWQndrMz9upUWSsJnsiL2oZMcyH1pTzSVK4DrTRcnxpYb"
+			]
+		},
+		"contracts/NFTexchange/Lib/MarketOwner.sol": {
+			"keccak256": "0xce7841563a8bda36be8ac573426f52dcd3c0a70a12e39a5be3da77d6f79e6e0d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4a0b8b662d21f0b73701a4ea6bc44387ff70baf70048b585185449d126e09eab",
+				"dweb:/ipfs/QmSpY244nUTCwR59pjpsjES9Nkf9Zht7Me3vtHXqYUAu1s"
+			]
+		},
+		"contracts/NFTexchange/Lib/Order.sol": {
+			"keccak256": "0xaafcb219f2098ea6cb7dc4549751e93dd270acf17f2dd0503c05b290542477af",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b52f47b58608c761dbb0860e11ca62208f50705224f48b29a3240c4dca2b51ca",
+				"dweb:/ipfs/QmWZ8evtj2LyckqxFND51WZUww5qwPxNN3orbBpp949WP8"
+			]
+		},
+		"contracts/NFTexchange/Lib/State.sol": {
+			"keccak256": "0x53400cadda262ddd930a847307f8032f8dc0252aa4f21708445f0aa97432d00e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1efed02e32b9467fff022401551bab847309212036a5ca49518556b8e4a0733b",
+				"dweb:/ipfs/QmQ4FqiPEZggA4Cj7Z7Ycz4fuynKNqzCNuZegzdgsad4L7"
+			]
+		},
+		"contracts/NFTexchange/Lib/Validate.sol": {
+			"keccak256": "0x198408ed2c8ad63f15032d4f4ae1b7b307771454d913af6dbb4e992d49cc7ec7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0fa03ead20e36cb5ff58e5ed273649d1cc12204570a62bd55515b3c6ec80d992",
+				"dweb:/ipfs/QmViaWXsP6P6z2gP6SocXpWusCMsPXPxjfcfNqnafJE3wo"
+			]
+		},
+		"contracts/NFTexchange/Lib/interface/IMarketOwner.sol": {
+			"keccak256": "0x52ec4070fce9244df6de5ee8e49117f9a692fede8dc1d5d3bef42bab139d001e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f507f96e956047a51ad73dc7d98303f6c3ffaaac32179a46db586a01d02e94f4",
+				"dweb:/ipfs/QmYcWQFhyD3fxNSkAJ86URipJiCRjE9oU8jpWBcazvXSyq"
+			]
+		},
+		"contracts/NFTexchange/Lib/interface/IOrder.sol": {
+			"keccak256": "0x5b3ac733aaadba02e5a74bb0ca6109a78dc81105ef028bb7c74ad64f47d17e72",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://db647add2ddccb76024e3555f5520c8b663ad4b2d64e90f9774a75d5d69239c9",
+				"dweb:/ipfs/QmT5kKq4nXRerouHVBrKKo6J1umjbqhZz9pSpKF73vYwU6"
+			]
+		},
+		"contracts/NFTexchange/Lib/interface/ITransferManager.sol": {
+			"keccak256": "0x36e286d3c8a2ed1895e42af4a5df840a05025ae3510eb99318cbd5eee78efd56",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://589110234321503dfbb008014f559703d3680c42d929fd9b3777ffddbf0a6cf8",
+				"dweb:/ipfs/QmRqD9D97wj3RKTND5WwvWMxw5pxLHJvgPD8Susv84mP9r"
+			]
+		},
+		"contracts/NFTexchange/NFTexchange.sol": {
+			"keccak256": "0x6ad180c069984f51e1f53aa833862601e538cc80677535062f659a1a052f7df4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a876010c81d080a7180748088dc5cfa7b2563ba8c1d6eb5c613c388985cb2ca1",
+				"dweb:/ipfs/QmRgNNiCY3RFvihGtjoQgE7zaLJCQ8MqpKTf3NrS6eTdtE"
+			]
+		},
+		"contracts/royalties/IERC2981Royalties.sol": {
+			"keccak256": "0x5ee1a447c5570dcd1ff4f0e81a62401348e65b5fb886c7d72936e8f497e5a570",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7b9aac0662f874b327bfb9157d9707bf1d0df430c0fed171cfe8c6dd7070f78d",
+				"dweb:/ipfs/QmQLxyipUAWtqgo8qdigFunu7j7FpuzqK779sMUn4X4AHA"
+			]
+		}
+	},
+	"version": 1
+}
