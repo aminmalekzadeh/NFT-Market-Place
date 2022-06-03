@@ -1121,11 +1121,11 @@
 			]
 		},
 		"contracts/NFTexchange/NFTexchange.sol": {
-			"keccak256": "0x6ad180c069984f51e1f53aa833862601e538cc80677535062f659a1a052f7df4",
+			"keccak256": "0x1647d68ad8488edfb2a026499ff750a0f3b0182c0dd662ad380e99adbe4a5e9b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a876010c81d080a7180748088dc5cfa7b2563ba8c1d6eb5c613c388985cb2ca1",
-				"dweb:/ipfs/QmRgNNiCY3RFvihGtjoQgE7zaLJCQ8MqpKTf3NrS6eTdtE"
+				"bzz-raw://8a102f1e3ab63f551816002cbfbbeddf0896cc014893e13870a787ce04aaf7d6",
+				"dweb:/ipfs/QmdzAM9GWq4PgkmCda9sv9ZNQh77GAwkW9qZPges5XtYPg"
 			]
 		},
 		"contracts/royalties/IERC2981Royalties.sol": {

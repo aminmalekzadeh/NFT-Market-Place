@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract signtureERC721 {
+library signtureERC721 {
 
     struct NFTVoucher {
         uint256 tokenId;

@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract signtureERC1155 {
+library signtureERC1155 {
 
     struct NFTVoucher {
         uint256 tokenId;
         uint256 minPrice;
         uint256 supply;
-        address account;
         string uri;
     }
 
@@ -25,7 +24,6 @@ contract signtureERC1155 {
         );  
     }
 
-// fix NFTvouncher
   function _verify(
     uint8 v,
     bytes32 r,
@@ -33,12 +31,14 @@ contract signtureERC1155 {
     NFTVoucher calldata voucher
   ) public view returns(address) {
     bytes32 eip712DomainHash = _hashDomain();
+    
     bytes32 hashStruct = keccak256(abi.encode(
-           keccak256("NFTVoucher(uint256 tokenId,uint256 minPrice,string uri)"),
-           voucher.tokenId,
-           voucher.minPrice,
-           keccak256(bytes(voucher.uri))
-        ));
+      keccak256("NFTVoucher(uint256 tokenId,uint256 minPrice,uint256 supply,string uri)"),
+      voucher.tokenId,
+      voucher.minPrice,
+      voucher.supply,
+      keccak256(bytes(voucher.uri))
+    ));
 
     bytes32 hash = keccak256(abi.encodePacked("\x19\x01", eip712DomainHash, hashStruct));
     address signer = ecrecover(hash, v, r, s);

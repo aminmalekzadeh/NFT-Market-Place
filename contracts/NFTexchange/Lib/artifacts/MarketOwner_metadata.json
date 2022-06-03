@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.14+commit.80d49f37"
+		"version": "0.8.7+commit.e28d00a7"
 	},
 	"language": "Solidity",
 	"output": {
@@ -139,7 +139,7 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": true,
+			"enabled": false,
 			"runs": 200
 		},
 		"remappings": []
@@ -170,11 +170,11 @@
 			]
 		},
 		"contracts/NFTexchange/Lib/LibAsset.sol": {
-			"keccak256": "0x3a1b743dbfa27101d1a564dff2b53efdb9591140a4161586bcdc842e567fe8a1",
+			"keccak256": "0xe3cc994fd15b0be907bfcaed7b4b7daca0b4f332979a531798fc451596bda8d7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4ce54bd18193801b3f5019f0004c78c141ba8143b31878f6c2870d26806f78a7",
-				"dweb:/ipfs/QmNcAzJhaU1W9CVj2xJxA6ZLziwzN7fnF7T6ZUeqf8eHBd"
+				"bzz-raw://d3efa902c0bfbb80c9040941c21ad5c2e7ed5ee1c451354b3ffe788dc6ba4974",
+				"dweb:/ipfs/QmQSA687vBnMQvVwBp8gcVNSFFgiDy8qyvwAoyyk9mvZsN"
 			]
 		},
 		"contracts/NFTexchange/Lib/LibTransfer.sol": {

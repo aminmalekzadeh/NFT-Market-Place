@@ -185,17 +185,17 @@ contract NFTexchange is ReentrancyGuard, Validate, MarketOwner {
         if(buyerAsset.assetType.assetClass == LibAsset.ERC20_ASSET_CLASS){
           checkBalanceERC20(buyToken, buyerAsset.value, msg.sender);
            uint256 priceWithRoyalty = buyerAsset.value.sub(royaltyValue);
-           uint256 finalPrice = priceWithRoyalty.sub(protcolfee);
+           uint256 finalCost = priceWithRoyalty.sub(protcolfee);
            TransferFeeMarketOwner(buyerAsset);
-           IERC20(buyToken).transferFrom(msg.sender, order.seller, priceWithRoyalty);
+           IERC20(buyToken).transferFrom(msg.sender, order.seller, finalCost);
            IERC20(buyToken).transferFrom(msg.sender, royaltyReciever, royaltyValue);
         }else if(buyerAsset.assetType.assetClass == LibAsset.ETH_ASSET_CLASS) {
            require(msg.value > 0, "wei can't be zero");
            require(msg.value >= buyerAsset.value, "you don't have ether enough");
            uint256 priceWithRoyalty = buyerAsset.value - royaltyValue;
-           uint256 finalPrice = priceWithRoyalty.sub(protcolfee);
+           uint256 finalCost = priceWithRoyalty.sub(protcolfee);
            TransferFeeMarketOwner(buyerAsset);
-           address(order.seller).transferEth(buyerAsset.value);
+           address(order.seller).transferEth(finalCost);
            address(royaltyReciever).transferEth(royaltyValue);
         }
    }
